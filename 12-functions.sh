@@ -2,6 +2,14 @@
 
 userid=$(id -u) # id -u gives the id of the user if id -u is o then it is root user
 
+check_root(){
+    if [ $userid -ne 0 ]
+    then
+        echo "Please run this script with root access"
+        exit 1
+    fi
+}
+
 validate(){
     if [ $1 -ne 0 ]
     then
@@ -12,11 +20,7 @@ validate(){
     fi
 }
 
-if [ $userid -ne 0 ]
-then
-    echo "Please run this script with root access"
-    exit 1
-fi
+check_root
 
 dnf list installed git
 
