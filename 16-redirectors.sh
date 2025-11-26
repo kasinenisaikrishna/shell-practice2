@@ -34,13 +34,13 @@ check_root
 
 for package in $@ 
 do
-    dnf list installed $package
+    dnf list installed $package &>>$log_file
     if [ $? -ne 0 ]
     then
-        echo "$package is not installed...going to install it"
-        dnf install $package -y
+        echo "$package is not installed...going to install it" &>>$log_file
+        dnf install $package -y &>>$log_file
         validate $? "installing $package"
     else
-        echo "$package is already installed...nothing to do"
+        echo -e "$package is already $Y installed...nothing to do $N" &>>$log_file
     fi
 done
