@@ -19,6 +19,7 @@ usage(){
 if [ $# -lt 2 ]
 then
     usage
+    exit 1
 fi
 
 if [ ! -d $source_dir ]
