@@ -3,6 +3,7 @@
 source_dir=$1
 dest_dir=$2
 days=${3:-14} # if $3 is empty default is 14 days
+time_stamp=$(date +%Y-%m-%d-%H-%M-%S)
 
 R="\e[31m"
 G="\e[32m"
@@ -37,6 +38,25 @@ echo "files: $files"
 if [ ! -z $files ] # true if files is empty, ! makes it expression false
 then
     echo "files are found"
+    zip_file="$dest_dir/app-logs-$time_stamp.zip"
+    find ${source_dir} -name "*.log" -mtime +14 | zip "$zip_file" -@
+
+    #check if zip file is successfully created or not
+
+    if [ -f $zip_file ]
+    then
+        echo "successfully zipped files older than $days"
+
+        #remove the files after zipping
+        while IFS= read -r file
+        do
+            echo "deleting file: $file"
+            rm -rf $file
+        done <<< $files
+    else
+        echo "Zipping the files is failed"
+        exit 1
+    fi
 else
     echo "no files older than $days"
 fi
